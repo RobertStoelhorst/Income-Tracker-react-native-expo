@@ -24,14 +24,42 @@ import {
   ContributionGraph,
   StackedBarChart,
 } from "react-native-chart-kit";
+import moment from "moment";
+
+//  dataset needs to be in a state variable
 
 const App = () => {
   const screenWidth = Dimensions.get("window").width;
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [total, setTotal] = useState(0);
-  const [labels, setLabels] = useState([]);
-  const [dataPoints, setDataPoints] = useState([]);
+  const [data, setData] = useState([
+    { date: moment().format("LL"), amount: 2000 },
+    { date: moment().subtract(1, "days").format("LL"), amount: 2500 },
+    { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
+    { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
+    { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
+    { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
+    { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
+    { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
+    { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
+    { date: moment().subtract(1, "days").format("LL"), amount: 4500 },
+    { date: moment().subtract(2, "days").format("LL"), amount: 5500 },
+    { date: moment().subtract(2, "days").format("LL"), amount: 5500 },
+  ]);
+
+  const [transformedData, setTransformedData] = useState([]);
+
+  useEffect(() => {
+    setTransformedData(transformData(groupBy(data, "date")));
+  }, [data]);
+
+  const groupBy = (array, key) =>
+    array.reduce((rv, x) => {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+
   const [gigs, setGigs] = useState([
     {
       description: "SSI Ignite David Polson",
@@ -40,7 +68,37 @@ const App = () => {
     },
   ]);
 
-  useEffect(() => {}, [gigs]);
+  const getDates = () => transformedData.map((pair) => pair.date);
+  const getAmounts = () => transformedData.map((pair) => pair.amount);
+  const transformData = (groupedData) => {
+    const transformedArray = [];
+
+    Object.entries(groupedData).forEach((entry) => {
+      const total = entry[1].reduce((total, pair) => total + pair.amount, 0);
+      transformedArray.push({
+        date: moment(entry[0]).format("DD/MM"),
+        amount: total,
+      });
+    });
+
+    const sortedArray = transformedArray.sort((a, b) =>
+      moment(a["date"]).diff(moment(b["date"]))
+    );
+
+    return transformedArray;
+  };
+
+  console.log("DEBUG 🔥", data);
+  console.log("the dates ⏲", getDates());
+  console.log("the amounts ⏲", getAmounts());
+  console.log(
+    "the grouped values are ⏲",
+    Object.entries(groupBy(data, "date"))
+  );
+  console.log(
+    "the total grouped value ⏲",
+    transformData(groupBy(data, "date"))
+  );
 
   // useEffect(() => {
   //   const total = gigs.reduce((total, gig) => {
@@ -109,30 +167,10 @@ const App = () => {
             </Text>
             <LineChart
               data={{
-                labels: [
-                  // "Jan",
-                  // "Feb",
-                  // "Mar",
-                  // "Apr",
-                  // "May",
-                  // "Jun",
-                  // "Jul",
-                  // "Aug",
-                  // "Sep",
-                  // "Oct",
-                  // "Nov",
-                  // "Dec",
-                ],
+                labels: getDates(),
                 datasets: [
                   {
-                    data: [
-                      // gigs[0].amount,
-                      // gigs[1].amount,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                    ],
+                    data: getAmounts(),
                   },
                 ],
               }}
@@ -198,11 +236,14 @@ const App = () => {
             keyboardType="numeric"
             onChangeText={(text) => setAmount(text)}
           />
-          <Button
-            disabled={!amount || !description}
-            onPress={addGig}
-            title={"Add Gig 🚀"}
-          ></Button>
+          <View style={styles.jobButton}>
+            <Button
+              disabled={!amount || !description}
+              onPress={addGig}
+              title={"Add Job 🚀"}
+              color="#b338f5"
+            ></Button>
+          </View>
           {gigs.map((gig) => (
             <View>
               <ScrollView>
@@ -265,6 +306,14 @@ const styles = StyleSheet.create({
     // borderColor: "red",
     // borderWidth: 2,
     // borderRadius: 16,
+  },
+
+  jobButton: {
+    margin: "auto",
+    width: "40%",
+    // borderRadius: 16,
+    // borderColor: "#3b38f5",
+    // borderWidth: 1.5,
   },
 
   // todoInput: {

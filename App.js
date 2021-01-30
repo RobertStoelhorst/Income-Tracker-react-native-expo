@@ -27,7 +27,6 @@ import {
 import moment from "moment";
 
 //  dataset needs to be in a state variable
-
 const App = () => {
   const screenWidth = Dimensions.get("window").width;
   const [description, setDescription] = useState("");
@@ -39,15 +38,14 @@ const App = () => {
     { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
     { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
     { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
-    { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
-    { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
-    { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
-    { date: moment().subtract(1, "days").format("LL"), amount: 3500 },
-    { date: moment().subtract(1, "days").format("LL"), amount: 4500 },
+    { date: moment().subtract(7, "days").format("LL"), amount: 3500 },
+    { date: moment().subtract(6, "days").format("LL"), amount: 3500 },
+    { date: moment().subtract(5, "days").format("LL"), amount: 3500 },
+    { date: moment().subtract(4, "days").format("LL"), amount: 3500 },
+    { date: moment().subtract(3, "days").format("LL"), amount: 4500 },
     { date: moment().subtract(2, "days").format("LL"), amount: 5500 },
     { date: moment().subtract(2, "days").format("LL"), amount: 5500 },
   ]);
-
   const [transformedData, setTransformedData] = useState([]);
 
   useEffect(() => {
@@ -85,18 +83,18 @@ const App = () => {
       moment(a["date"]).diff(moment(b["date"]))
     );
 
-    return transformedArray;
+    return sortedArray;
   };
 
   console.log("DEBUG 🔥", data);
-  console.log("the dates ⏲", getDates());
-  console.log("the amounts ⏲", getAmounts());
+  console.log("The Dates ⏲️", getDates());
+  console.log("The Amounts ⏲️", getAmounts());
   console.log(
-    "the grouped values are ⏲",
+    "The GROUPED values are ⏲️",
     Object.entries(groupBy(data, "date"))
   );
   console.log(
-    "the total grouped value ⏲",
+    "The Total grouped value 👽",
     transformData(groupBy(data, "date"))
   );
 
@@ -110,7 +108,6 @@ const App = () => {
       {
         description: description,
         amount: amount,
-        timestamp: new Date(),
       },
     ]);
 

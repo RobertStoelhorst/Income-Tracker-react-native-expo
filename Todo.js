@@ -11,8 +11,4 @@ const Todo = ({ title }) => {
 
 export default Todo;
 
-const styles = StyleSheet.create({
-  todo: {
-    // backgroundColor: "teal",
-  },
-});
+const styles = StyleSheet.create({});

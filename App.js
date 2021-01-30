@@ -30,12 +30,17 @@ const App = () => {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [total, setTotal] = useState(0);
+  const [labels, setLabels] = useState([]);
+  const [dataPoints, setDataPoints] = useState([]);
   const [gigs, setGigs] = useState([
     {
-      description: "Freelance job with Rob",
-      amount: 499.99,
+      description: "SSI Ignite David Polson",
+      amount: 250.0,
+      date: new Date(),
     },
   ]);
+
+  useEffect(() => {}, [gigs]);
 
   // useEffect(() => {
   //   const total = gigs.reduce((total, gig) => {
@@ -100,29 +105,29 @@ const App = () => {
           </View>
           <View style={styles.chartView}>
             <Text style={{ textAlign: "center", fontSize: 20 }}>
-              Bezier Line Chart
+              Income Progress
             </Text>
             <LineChart
               data={{
                 labels: [
-                  "Jan",
-                  "Feb",
-                  "Mar",
-                  "Apr",
-                  "May",
-                  "Jun",
-                  "Jul",
-                  "Aug",
-                  "Sep",
-                  "Oct",
-                  "Nov",
-                  "Dec",
+                  // "Jan",
+                  // "Feb",
+                  // "Mar",
+                  // "Apr",
+                  // "May",
+                  // "Jun",
+                  // "Jul",
+                  // "Aug",
+                  // "Sep",
+                  // "Oct",
+                  // "Nov",
+                  // "Dec",
                 ],
                 datasets: [
                   {
                     data: [
-                      Math.random() * 100,
-                      Math.random() * 100,
+                      // gigs[0].amount,
+                      // gigs[1].amount,
                       Math.random() * 100,
                       Math.random() * 100,
                       Math.random() * 100,
@@ -134,13 +139,13 @@ const App = () => {
               width={screenWidth} // from react-native
               height={220}
               yAxisLabel="$"
-              yAxisSuffix="k"
+              // yAxisSuffix="k"
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
                 // backgroundColor: "#e26a00",
                 backgroundGradientFrom: "#38bcf5",
                 backgroundGradientTo: "#3b38f5",
-                decimalPlaces: 1, // optional, defaults to 2dp
+                decimalPlaces: 0, // optional, defaults to 2dp
                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 style: {
@@ -155,7 +160,7 @@ const App = () => {
               bezier
               style={{
                 marginVertical: 8,
-                borderRadius: 0,
+                borderRadius: 16,
               }}
             />
           </View>
@@ -167,7 +172,7 @@ const App = () => {
               marginBottom: 15,
             }}
           >
-            total Income: {total}
+            total Income: ${total.toFixed(2)}
           </Text>
           {/* for the todos to generate succesfully they also need to generate a key rather than using the index like I have below, using the index is frowned upon there is a unique key generator install library package called UUIDV4 */}
           {/* <ScrollView>
